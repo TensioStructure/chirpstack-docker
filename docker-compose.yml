@@ -2,6 +2,7 @@ services:
   chirpstack:
     image: chirpstack/chirpstack:4
     command: -c /etc/chirpstack
+    # restart is problematic IF we use chirpstack-setup
     restart: unless-stopped
     volumes:
       - ./configuration/chirpstack:/etc/chirpstack
@@ -15,6 +16,19 @@ services:
       - POSTGRESQL_HOST=postgres
     ports:
       - "8080:8080"
+
+  # chirpstack-setup:
+  #   image: chirpstack/chirpstack:4
+  #   restart: no
+  #   command: -c /etc/chirpstack create-api-key --name global
+  #   volumes:
+  #     - ./configuration/chirpstack:/etc/chirpstack
+  #   environment:
+  #     - MQTT_BROKER_HOST=mosquitto
+  #     - REDIS_HOST=redis
+  #     - POSTGRESQL_HOST=postgres
+  #   depends_on:
+  #     - chirpstack
 
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:4

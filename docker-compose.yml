@@ -90,6 +90,15 @@ services:
     volumes: 
       - ./configuration/mosquitto/config/:/mosquitto/config/
 
+  # mosquitto-setup:
+  #   image: eclipse-mosquitto:2
+  #   restart: no
+  #   command: mosquitto_sub -v -t "+/gateway/#"
+  #   volumes: 
+  #     - ./configuration/mosquitto/config/:/mosquitto/config/
+  #   depends_on:
+  #     - mosquitto
+
 volumes:
   postgresqldata:
   redisdata:

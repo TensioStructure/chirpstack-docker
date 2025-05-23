@@ -1,6 +1,6 @@
 services:
   chirpstack:
-    image: chirpstack/chirpstack:4
+    image: chirpstack/chirpstack:4.12
     command: -c /etc/chirpstack
     # restart is problematic IF we use chirpstack-setup
     restart: unless-stopped
@@ -16,19 +16,6 @@ services:
       - POSTGRESQL_HOST=postgres
     ports:
       - "8080:8080"
-
-  # chirpstack-setup:
-  #   image: chirpstack/chirpstack:4
-  #   restart: no
-  #   command: -c /etc/chirpstack create-api-key --name global
-  #   volumes:
-  #     - ./configuration/chirpstack:/etc/chirpstack
-  #   environment:
-  #     - MQTT_BROKER_HOST=mosquitto
-  #     - REDIS_HOST=redis
-  #     - POSTGRESQL_HOST=postgres
-  #   depends_on:
-  #     - chirpstack
 
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:4
@@ -56,7 +43,7 @@ services:
       - mosquitto
 
   chirpstack-rest-api:
-    image: chirpstack/chirpstack-rest-api:4
+    image: chirpstack/chirpstack-rest-api:4.12
     restart: unless-stopped
     command: --server chirpstack:8080 --bind 0.0.0.0:8090 --insecure
     ports:
@@ -89,15 +76,6 @@ services:
       - "1883:1883"
     volumes: 
       - ./configuration/mosquitto/config/:/mosquitto/config/
-
-  # mosquitto-setup:
-  #   image: eclipse-mosquitto:2
-  #   restart: no
-  #   command: mosquitto_sub -v -t "+/gateway/#"
-  #   volumes: 
-  #     - ./configuration/mosquitto/config/:/mosquitto/config/
-  #   depends_on:
-  #     - mosquitto
 
 volumes:
   postgresqldata:
